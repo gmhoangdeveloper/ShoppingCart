@@ -1,0 +1,37 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Caps V1",
+      "description": "I'm a product description. I'm a great place to add more details about your product such as sizing, material, care instructions and cleaning instructions",
+      "image1": "https://static.wixstatic.com/media/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.jpg/v1/fill/w_1000,h_750,al_c,q_85,usm_0.66_1.00_0.01/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.webp",
+      "image2": "https://static.wixstatic.com/media/baac51_e0ebe39677864d7f934e2544bbf9ae19~mv2_d_2000_1500_s_2.jpg/v1/fill/w_500,h_375,al_c,q_85,usm_0.66_1.00_0.01/baac51_e0ebe39677864d7f934e2544bbf9ae19~mv2_d_2000_1500_s_2.webp",
+       "price": 1,
+      "quantity": 1,
+      "size": "",
+      "status": 0
+    },
+    {
+      "id": 2,
+      "title": "Caps V2",
+      "description": "I'm a product description. I'm a great place to add more details about your product such as sizing, material, care instructions and cleaning instructions",
+      "image1": "https://static.wixstatic.com/media/baac51_34821e1460024305a72be06274bd65d6~mv2_d_2000_1500_s_2.jpg/v1/fill/w_500,h_375,al_c,q_85,usm_0.66_1.00_0.01/baac51_34821e1460024305a72be06274bd65d6~mv2_d_2000_1500_s_2.webp",
+      "image2": "https://static.wixstatic.com/media/baac51_b9031651b1e2480b80e11d455923f407~mv2_d_2000_1500_s_2.jpg/v1/fill/w_500,h_375,al_c,q_85,usm_0.66_1.00_0.01/baac51_b9031651b1e2480b80e11d455923f407~mv2_d_2000_1500_s_2.webp",
+       "price": 1,
+      "quantity": 1,
+      "size": "",
+      "status": 0
+    },
+    {
+        "id": 3,
+        "title": "Caps V3",
+        "description": "I'm a product description. I'm a great place to add more details about your product such as sizing, material, care instructions and cleaning instructions",
+        "image1": "https://static.wixstatic.com/media/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.jpg/v1/fill/w_1000,h_750,al_c,q_85,usm_0.66_1.00_0.01/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.webp",
+        "image2": "https://static.wixstatic.com/media/baac51_e0ebe39677864d7f934e2544bbf9ae19~mv2_d_2000_1500_s_2.jpg/v1/fill/w_500,h_375,al_c,q_85,usm_0.66_1.00_0.01/baac51_e0ebe39677864d7f934e2544bbf9ae19~mv2_d_2000_1500_s_2.webp",
+         "price": 1,
+        "quantity": 1,
+        "size": "",
+        "status": 0
+      }
+  ]
+}

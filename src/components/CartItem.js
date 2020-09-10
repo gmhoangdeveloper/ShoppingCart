@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -8,8 +7,10 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import DialogCartItem from "./DialogCartItem";
+// import CartDrawer from "./CartDrawer";
+
 const useStyles = makeStyles({
   menuNavbar: {
     backgroundImage:
@@ -29,20 +30,29 @@ const useStyles = makeStyles({
     fontWeight: "bold",
   },
 });
-const CartItem = () => {
+const CartItem = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [childOpen, setchildOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const {
+    id,
+    image1,
+    image2,
+    price,
+    quantity,
+    size,
+    status,
+    title,
+    description,
+  } = props.productsItem;
 
-  const handleClick = (value) => {
-    console.log(value)
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  //   const [open, setOpen] = useState(false);
+  //   const [childOpen, setchildOpen] = useState(false);
+
+  //   const handleClick = (value) => {
+  //     console.log(value);
+  //   };
+  //   const handleClose = () => {
+  //     setOpen(false);
+  //   };
   return (
     <>
       <Grid item xs={12} sm={6} md={3}>
@@ -52,20 +62,17 @@ const CartItem = () => {
               component="img"
               alt="Contemplative Reptile"
               height="100%"
-              image="https://static.wixstatic.com/media/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.jpg/v1/fill/w_277,h_208,al_c,q_80,usm_0.66_1.00_0.01/baac51_ae96d298952242c2bb5cce4abdcab7a9~mv2_d_2000_1500_s_2.webp"
+              image={image1}
               title="Contemplative Reptile"
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Im a Product
+              <Typography gutterBottom component="h5" align="center">
+                {title}
               </Typography>
-              <Typography gutterBottom variant="h5" component="h2">
-                $2.25
+              <Typography gutterBottom component="h5" align="center">
+                ${price}
               </Typography>
-              <Button variant="outlined" fullWidth={true} >
-                Add To Card
-                <DialogCartItem addTocar="true" isAgent={handleClick} test="hoang" />
-              </Button>
+              <DialogCartItem dataProductDialog={props.productsItem} />
             </CardContent>
           </CardActionArea>
         </Card>

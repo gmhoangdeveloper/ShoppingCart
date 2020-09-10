@@ -1,9 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+import { CardMedia, Container, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import { Container, Typography, CardMedia } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
@@ -21,7 +19,7 @@ const AboutUs = (props) => {
   const classes = useStyles();
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid item xs={6}>

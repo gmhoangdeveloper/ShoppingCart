@@ -19,8 +19,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import CartDrawer from "./CartDrawer";
+// import logo from "./../image/Capture.JPG";
 function TransitionLeft(props) {
   console.log(props);
   return <Slide {...props} direction="left" />;
@@ -65,10 +68,17 @@ const StyledBadge = withStyles((theme) => ({
     padding: "0 4px",
   },
 }))(Badge);
+
 export default function Navbar() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [transition, setTransition] = React.useState(undefined);
+  const [cartDrawer, setcartDrawer] = useState(false);
+  const cartList = useSelector((state) => state.cartList);
+  const dataNumber = JSON.parse(localStorage.getItem("CART")) || [];
+  const datacartNumber = Object.keys(dataNumber).length;
+  console.log(datacartNumber);
+  const dispatch = useDispatch();
 
   const handleClick = (Transition) => () => {
     setTransition(() => Transition);
@@ -76,14 +86,17 @@ export default function Navbar() {
   };
 
   const handleClose = (event, reason) => {
-    // if (reason === "clickaway") {
-    //     return;
-    //   }
     setOpen(false);
   };
 
+  const openCartDrawer = () => {
+    console.log("gmh");
+    setcartDrawer(true);
+    // return <CartDrawer openCartDrawe={"gmh"} />;
+  };
   return (
     <div>
+ 
       <Container maxWidth="lg" className={classes.root}>
         <Grid
           container
@@ -92,23 +105,23 @@ export default function Navbar() {
           alignItems="center"
           lg={12}
         >
-          <Grid container item lg={5} xs={5}>
-            <img src="image/Capture.JPG"></img>
+          <Grid container  lg={5} xs={5}>
+            <img src="./image/Capture.JPG" />
           </Grid>
           <Grid
             container
             direction="row"
             justify="flex-end"
             alignItems="center"
-            item
+            
             lg={6}
             xs={7}
-            // style={{ border: "1px solid red" }}
           >
-            <Grid item>
-              <IconButton aria-label="cart">
-                <StyledBadge badgeContent={4} color="secondary">
+            <Grid >
+              <IconButton aria-label="cart" onClick={openCartDrawer}>
+                <StyledBadge badgeContent={datacartNumber} color="secondary">
                   <ShoppingCartIcon />
+           
                 </StyledBadge>
               </IconButton>
             </Grid>
@@ -117,7 +130,6 @@ export default function Navbar() {
                 <Avatar>
                   <AccountCircleIcon />
                 </Avatar>
-
                 <Box>Login</Box>
               </Box>
             </Grid>
@@ -129,7 +141,6 @@ export default function Navbar() {
           </Grid>
         </Grid>
       </Container>
-
       <Snackbar
         open={open}
         onClose={handleClose}
@@ -138,7 +149,6 @@ export default function Navbar() {
       >
         <Grid xs={12}>
           <div className={classes.bgMenu}></div>
-
           <GridList cols={12} cellHeight={50} className={classes.bgalert}>
             <GridListTile cols={12}>
               <Typography align="right">

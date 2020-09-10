@@ -1,84 +1,136 @@
-import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
-import CartItem from "../components/CartItem";
-import Footer from "../components/Footer";
-import GridImage from "../components/GridImage";
-const useStyles = makeStyles({
-  menuNavbar: {
-    backgroundImage:
-      "url(https://static.wixstatic.com/media/baac51_88d59da2f5a844e9850ee580ab0c8b8d~mv2_d_4000_1782_s_2.jpg/v1/fill/w_1189,h_660,al_tl,q_85,usm_0.66_1.00_0.01/baac51_88d59da2f5a844e9850ee580ab0c8b8d~mv2_d_4000_1782_s_2.webp)",
-    width: "100%",
-    height: "500px",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
   },
-  headerText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: " 80px",
-    fontWeight: "bold",
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
-  headerText2: {
-    color: "white",
-    textAlign: "center",
-  },
-  root: { flexGrow: 1 },
-  buttonHover: {
-    "&:hover": {
-      backgroundColor: "white",
-      color: "black",
-    },
-    textAlign: "center",
-    border: "1px solid white",
-    color: "white",
-    fontWeight: "none",
-  },
-});
-const Test = () => {
+}));
+
+export default function SimpleSelect() {
   const classes = useStyles();
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
-    <>
-      <Container maxWidth="lg" className={classes.menuNavbar}>
-        <Box>
-          <Typography className={classes.headerText}>ALWAYS BE</Typography>
-          <Typography className={classes.headerText}>ORIGINAL</Typography>
-          <Typography className={classes.headerText2}>
-            NEW ARRIVALS ARE HERE
-          </Typography>
-          <Typography align="center">
-            <Button className={classes.buttonHover}>
-              <span> Shop Now</span>
-            </Button>
-          </Typography>
-        </Box>
-      </Container>
-      <Container maxWidth="lg" className={classes.root}>
-        <Typography align="center">LIMITED EDITION COLLECTION</Typography>
-        <Grid container direction="row" justify="flex-start" spacing="3">
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-        </Grid>
-        <Box m={5}>
-          <Typography align="center">
-            <Button variant="contained">Shop All</Button>
-          </Typography>
-        </Box>
-      </Container>
-      {/* Danh sach hinh anhr
-       */}
-      <GridImage />
-
-      <Footer />
-    </>
+    <div>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Some important helper text</FormHelperText>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <Select
+          value={age}
+          onChange={handleChange}
+          displayEmpty
+          className={classes.selectEmpty}
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Without label</FormHelperText>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+          Age
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={age}
+          onChange={handleChange}
+          displayEmpty
+          className={classes.selectEmpty}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Label + placeholder</FormHelperText>
+      </FormControl>
+      <FormControl className={classes.formControl} disabled>
+        <InputLabel id="demo-simple-select-disabled-label">Name</InputLabel>
+        <Select
+          labelId="demo-simple-select-disabled-label"
+          id="demo-simple-select-disabled"
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Disabled</FormHelperText>
+      </FormControl>
+      <FormControl className={classes.formControl} error>
+        <InputLabel id="demo-simple-select-error-label">Name</InputLabel>
+        <Select
+          labelId="demo-simple-select-error-label"
+          id="demo-simple-select-error"
+          value={age}
+          onChange={handleChange}
+          renderValue={(value) => `⚠️  - ${value}`}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Error</FormHelperText>
+      </FormControl>
+    
+     
+    </div>
   );
-};
-
-export default Test;
+}
