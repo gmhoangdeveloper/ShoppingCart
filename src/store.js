@@ -2,13 +2,18 @@ import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { productListReducer } from "./reducers/productReducers";
 import { cartListReducer } from "./reducers/cartReducers";
-// const cartItems = Cookie.getJSON("cartItems") || [];
-// const userInfo = Cookie.getJSON("userInfo") || null;
-
+import { paymentCartReducer } from "./reducers/checkoutcartReducers";
+import { signupforloginReducer } from "./reducers/signupforloginReducers";
+import { myaccountReducer } from "./reducers/myaccountReducers";
+import { alertListReducer } from "./reducers/alertReducers";
 const initialState = {};
 const reducer = combineReducers({
   productList: productListReducer,
   cartList: cartListReducer,
+  paymentCart: paymentCartReducer,
+  signupforlogin: signupforloginReducer,
+  myaccount: myaccountReducer,
+  alertReducer: alertListReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

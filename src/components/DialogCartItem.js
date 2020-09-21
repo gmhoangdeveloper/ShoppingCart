@@ -6,6 +6,9 @@ import {
   makeStyles,
   TextField,
   Typography,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -26,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DialogCartItem(props) {
   const classes = useStyles();
-  console.log("dataProductDialog", props);
   const { clickOpenDialog } = props;
   const {
     id,
@@ -39,21 +41,26 @@ export default function DialogCartItem(props) {
     title,
     description,
   } = props.dataProductDialog;
-  console.log("Get Props", props);
-  useEffect(() => {
-    // props.history.push("/cart/" + props.match.params.id );
-    return () => {};
-  }, []);
-  const [open, setOpen] = useState(clickOpenDialog);
-  // console.log("Get Props open", open);
 
+  const [open, setOpen] = useState(clickOpenDialog);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
+  const [dataProductCaps, setdataProductCaps] = useState({
+    ...props.dataProductDialog,
+  });
+  const handleChangeSizeandQuantity = (event) => {
+    const { name, value } = event.target;
+    setdataProductCaps((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    console.log(name, value, "name ,value");
+  };
+
   return (
     <div>
       <Button variant="outlined" fullWidth={true} onClick={handleClickOpen}>
@@ -79,39 +86,48 @@ export default function DialogCartItem(props) {
               ></CardMedia>
             </Grid>
             <Grid lg={6}>
-              <Typography variant="h4">{title}</Typography>
+              <Typography variant="h5">{title}</Typography>
               <Typography variant="h6">${price}</Typography>
               <Typography variant="h6">SKU: {id}</Typography>
-              <Typography>Size {size}</Typography>
               <FormControl className={classes.formControl}>
-                <NativeSelect
-                  className={classes.selectEmpty}
-                  name="age"
-                  inputProps={{ "aria-label": "age" }}
+                <InputLabel
+                  shrink
+                  id="demo-simple-select-placeholder-label-label"
                 >
-                  <option value="" disabled>
-                    Select
-                  </option>
-                  <option value={"Small"}>Small</option>
-                  <option value={"Medium"}>Medium</option>
-                  <option value={"Large"}>Large</option>
-                </NativeSelect>
-                <FormHelperText>Placeholder</FormHelperText>
+                  Size
+                </InputLabel>
+                <Select
+                  name="size"
+                  value={dataProductCaps.size}
+                  onChange={handleChangeSizeandQuantity}
+                  displayEmpty
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"Small"}>Small</MenuItem>
+                  <MenuItem value={"Medium"}>Medium</MenuItem>
+                  <MenuItem value={"Large"}>Large</MenuItem>
+                </Select>
+                <FormHelperText>Label + placeholder</FormHelperText>
               </FormControl>
               <Typography>Quantity</Typography>
               <TextField
-                // id="outlined-number"
+                id="outlined-number"
                 label="Number"
                 type="number"
+                name="quantity"
+                value={dataProductCaps.quantity}
+                onChange={handleChangeSizeandQuantity}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                InputProps={{ inputProps: { min: 1, max: 10 } }}
                 variant="outlined"
               />
               <br></br>
               <Link to={`/viewdetail/${id}`}>View More Details{id}</Link>
-
-              <CartDrawer addToCart={props.dataProductDialog} />
+              <CartDrawer addToCart={dataProductCaps}  quantity={dataProductCaps.quantity} />
             </Grid>
           </Grid>
         </DialogContent>

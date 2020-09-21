@@ -5,7 +5,7 @@ import {
   CardMedia,
   Grid,
   makeStyles,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import DialogCartItem from "./DialogCartItem";

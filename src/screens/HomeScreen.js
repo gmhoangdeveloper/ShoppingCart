@@ -1,12 +1,15 @@
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
 import CartItem from "../components/CartItem";
 import Footer from "../components/Footer";
 import GridImage from "../components/GridImage";
 import Navbar from "../components/Navbar";
+import DialogCartItem from "../components/DialogCartItem";
+
+import CustomizedSnackbars from "../components/Alert";
 const useStyles = makeStyles({
   menuNavbar: {
     backgroundImage:
@@ -46,15 +49,26 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const productList = useSelector((state) => state.productList);
-  console.log("productList", productList);
+  // console.log("productList", productList);
   const { products, loading, error } = productList;
-  console.log("products", products);
+  // console.log("products", products);
   useEffect(() => {
     dispatch(listProducts());
   }, []);
+
+  // Test
+  // const [testAlert, settestAlert] = useState({ laptop: false });
+  // const handleClick = (open) => {
+  //   console.log(open,"abc testAlert", testAlert);
+  //   settestAlert({ laptop: true });
+  // };
   return (
     <>
       <Navbar />
+      {/* <Button variant="outlined" onClick={handleClick}>
+        Open success snackbar
+      </Button>
+      <CustomizedSnackbars testAlert={testAlert} handleClick={handleClick} /> */}
       <Container maxWidth="lg" className={classes.menuNavbar}>
         <Box>
           <Typography className={classes.headerText}>ALWAYS BE</Typography>

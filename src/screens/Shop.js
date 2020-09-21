@@ -1,13 +1,22 @@
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  Slider,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Pagination from "@material-ui/lab/Pagination";
-import PaginationItem from "@material-ui/lab/PaginationItem";
-import React from "react";
-import { MemoryRouter, Route } from "react-router";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { listProducts } from "../actions/productActions";
 import CartItem from "../components/CartItem";
 import Footer from "../components/Footer";
+import GridImage from "../components/GridImage";
 import Navbar from "../components/Navbar";
+import DialogCartItem from "../components/DialogCartItem";
+
+import CustomizedSnackbars from "../components/Alert";
 const useStyles = makeStyles({
   menuNavbar: {
     backgroundImage:
@@ -43,49 +52,66 @@ const useStyles = makeStyles({
   },
 });
 const Shop = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const productList = useSelector((state) => state.productList);
+  // console.log("productList", productList);
+  const { products, loading, error } = productList;
+  // console.log("products", products);
+  useEffect(() => {
+    dispatch(listProducts());
+  }, []);
+
+  let maxPrice = Math.max(...products.map((products) => products.price));
+  let minPrice = Math.min(...products.map((products) => products.price));
+  const [value, setValue] = React.useState([minPrice, maxPrice]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  console.log("Three", maxPrice, minPrice, value);
+  const fillter = products.filter(
+    (products) => products.price >= minPrice && products.price <= maxPrice
+  );
   return (
     <>
       <Navbar />
-      <Container maxWidth="lg" className={classes.root}>
-        <Typography align="center">NEW ARRIVALS</Typography>
-        <Grid container direction="row" justify="flex-start" spacing="3">
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-          <CartItem></CartItem>
-        </Grid>
-        <Box m={5}>
+      <Container maxWidth="lg" className={classes.menuNavbar}>
+        <Box>
+          <Typography className={classes.headerText}>ALWAYS BE</Typography>
+          <Typography className={classes.headerText}>ORIGINAL</Typography>
+          <Typography className={classes.headerText2}>
+            NEW ARRIVALS ARE HERE
+          </Typography>
           <Typography align="center">
-            <MemoryRouter initialEntries={["/inbox"]} initialIndex={0}>
-              <Route>
-                {({ location }) => {
-                  const query = new URLSearchParams(location.search);
-                  const page = parseInt(query.get("page") || "1", 10);
-                  return (
-                    <Pagination
-                      page={page}
-                      count={10}
-                      renderItem={(item) => (
-                        <PaginationItem
-                          component={Link}
-                          to={`/inbox${
-                            item.page === 1 ? "" : `?page=${item.page}`
-                          }`}
-                          {...item}
-                        />
-                      )}
-                    />
-                  );
-                }}
-              </Route>
-            </MemoryRouter>
+            <Button className={classes.buttonHover}>
+              <span> Shop Now</span>
+            </Button>
           </Typography>
         </Box>
       </Container>
-      <Footer></Footer>
+      <Container maxWidth="lg" className={classes.root}>
+        <Typography align="center">LIMITED EDITION COLLECTION</Typography>
+        <Box m={5} style={{ width: "300px" }}>
+          <Typography id="range-slider" gutterBottom>
+            Temperature range
+          </Typography>
+          <Slider
+            value={value}
+            onChange={handleChange}
+            min={minPrice}
+            max={maxPrice}
+            valueLabelDisplay="auto"
+            aria-labelledby="range-slider"
+            // getAriaValueText={valuetext}
+          />
+        </Box>
+        <Grid container direction="row" justify="flex-start" spacing="3">
+          {fillter.map((products, key) => (
+            <CartItem productsItem={products} key={key} />
+          ))}
+        </Grid>
+      </Container>
+      <Footer />
     </>
   );
 };

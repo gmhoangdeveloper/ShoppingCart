@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
@@ -20,12 +21,13 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+
+import DialogSignInLogin from "./DialogSignInLogin";
 import { Link } from "react-router-dom";
-import CartDrawer from "./CartDrawer";
 // import logo from "./../image/Capture.JPG";
 function TransitionLeft(props) {
-  console.log(props);
+  // console.log(props);
   return <Slide {...props} direction="left" />;
 }
 const useStyles = makeStyles((theme) => ({
@@ -74,12 +76,9 @@ export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [transition, setTransition] = React.useState(undefined);
   const [cartDrawer, setcartDrawer] = useState(false);
+  const myaccount = useSelector((state) => state.myaccount);
   const cartList = useSelector((state) => state.cartList);
-  const dataNumber = JSON.parse(localStorage.getItem("CART")) || [];
-  const datacartNumber = Object.keys(dataNumber).length;
-  console.log(datacartNumber);
-  const dispatch = useDispatch();
-
+  const datacartNumber = Object.keys(cartList).length;
   const handleClick = (Transition) => () => {
     setTransition(() => Transition);
     setOpen(true);
@@ -90,13 +89,23 @@ export default function Navbar() {
   };
 
   const openCartDrawer = () => {
-    console.log("gmh");
     setcartDrawer(true);
-    // return <CartDrawer openCartDrawe={"gmh"} />;
+  };
+
+  const [
+    SignInandLoginOpenandClose,
+    setSignInandLoginOpenandClose,
+  ] = React.useState(false);
+
+  const handleClickOpenSignInandLogin = () => {
+    setSignInandLoginOpenandClose(true);
+  };
+
+  const handleCloseSignInandLogin = () => {
+    setSignInandLoginOpenandClose(false);
   };
   return (
     <div>
- 
       <Container maxWidth="lg" className={classes.root}>
         <Grid
           container
@@ -105,32 +114,55 @@ export default function Navbar() {
           alignItems="center"
           lg={12}
         >
-          <Grid container  lg={5} xs={5}>
-            <img src="./image/Capture.JPG" />
+          <Grid container lg={5} xs={5}>
+            <img src="/images/Capture.JPG" />
           </Grid>
           <Grid
             container
             direction="row"
             justify="flex-end"
             alignItems="center"
-            
             lg={6}
             xs={7}
           >
-            <Grid >
-              <IconButton aria-label="cart" onClick={openCartDrawer}>
-                <StyledBadge badgeContent={datacartNumber} color="secondary">
-                  <ShoppingCartIcon />
-           
-                </StyledBadge>
-              </IconButton>
+            <Grid>
+              <Link to="/paymentcart">
+                <IconButton aria-label="cart" onClick={openCartDrawer}>
+                  <StyledBadge badgeContent={datacartNumber} color="secondary">
+                    <ShoppingCartIcon />
+                  </StyledBadge>
+                </IconButton>
+              </Link>
             </Grid>
             <Grid>
               <Box className={classes.sectionUser}>
                 <Avatar>
-                  <AccountCircleIcon />
+                  {myaccount.account.length >= 1 &&
+                  myaccount.account[0].avatar !== "" ? (
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={myaccount.account[0].avatar}
+                    />
+                  ) : (
+                    <AccountCircleIcon />
+                  )}
                 </Avatar>
-                <Box>Login</Box>
+                {/* <Box>Đăng Nhập | Đăng Ký</Box> */}
+                {myaccount.account.length >= 1 ? (
+                  <Button variant="outlined" color="primary">
+                    <Link to="/my-account">
+                      {myaccount.account[0].email.split("@", 1)}
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleClickOpenSignInandLogin}
+                  >
+                    Đăng Nhập | Đăng Ký
+                  </Button>
+                )}
               </Box>
             </Grid>
             <Grid>
@@ -141,6 +173,19 @@ export default function Navbar() {
           </Grid>
         </Grid>
       </Container>
+      {/* FROM ĐĂNG KÝ ĐĂNG NHÂP */}
+      <Dialog
+        open={SignInandLoginOpenandClose}
+        onClose={handleCloseSignInandLogin}
+        maxWidth="md"
+        // fullWidth={true}
+        aria-describedby="alert-dialog-description"
+        aria-labelledby="customized-dialog-title"
+      >
+        <DialogSignInLogin />
+      </Dialog>
+      {/*END FROM ĐĂNG KÝ ĐĂNG NHÂP  */}
+      {/* MENU */}
       <Snackbar
         open={open}
         onClose={handleClose}
@@ -192,6 +237,7 @@ export default function Navbar() {
           </GridList>
         </Grid>
       </Snackbar>
+      {/* END MENU */}
     </div>
   );
 }

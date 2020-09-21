@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputLabel,
   Select,
+  Snackbar,
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,6 +21,7 @@ import { listProducts } from "../actions/productActions";
 import CartDrawer from "../components/CartDrawer";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import Alert from "@material-ui/lab/Alert";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -40,25 +42,32 @@ const ViewDetailsScreen = (props) => {
   const productList = useSelector((state) => state.productList);
   const countNumberParams = props.match.params.id - 1;
   const productViewDetail = productList.products[countNumberParams];
+  const [open, setOpen] = React.useState(false);
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [Cartdata, setCartdata] = useState();
+  useEffect(() => {
+    dispatch(listProducts());
+  }, []);
   if (productViewDetail !== undefined) {
     if (Cartdata === undefined) {
       setCartdata(productViewDetail);
     }
   }
+  const testsubmit = (va) => {
+    var e = document.getElementById("detailProductSize").innerHTML;
+    setOpen(true);
+  };
   const handleChangeSize = (event, value) => {
-    const dataSize = event.target.value;
     setSize(event.target.value);
     const new_objSize = {
       ...Cartdata,
+      quantity: 1,
       size: `${event.target.value}`,
     };
     setCartdata(new_objSize);
   };
   const handleChangeQuantity = (event, value) => {
-    event.preventDefault();
     setQuantity(event.target.value);
     const new_objQuantity = {
       ...Cartdata,
@@ -66,13 +75,17 @@ const ViewDetailsScreen = (props) => {
     };
     setCartdata(new_objQuantity);
   };
-  useEffect(() => {
-    dispatch(listProducts());
-  }, []);
-
   return (
     <>
       <Navbar />
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        onClose={false}
+      >
+        <Alert severity="error">This is an error message!</Alert>
+      </Snackbar>
       <Container maxWidth="lg">
         {productViewDetail && (
           <Grid container xs={12} spacing={1} style={{ margin: "20px" }}>
@@ -103,12 +116,10 @@ const ViewDetailsScreen = (props) => {
                   value={size}
                   onChange={handleChangeSize}
                   displayEmpty
-                  className={classes.selectEmpty}
+                  id="detailProductSize"
                   inputProps={{ "aria-label": "Without label" }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value={"Small"}>Small</MenuItem>
                   <MenuItem value={"Medium"}>Medium</MenuItem>
                   <MenuItem value={"Large"}>Large</MenuItem>
@@ -125,7 +136,7 @@ const ViewDetailsScreen = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                InputProps={{ inputProps: { min: 1, max: 10 } }}
+                // InputProps={{ inputProps: { min: 1, max: 10 } }}
                 variant="outlined"
               />
               <Grid
@@ -135,11 +146,15 @@ const ViewDetailsScreen = (props) => {
                 justify="space-between"
                 alignItems="flex-start"
               >
-                <Grid lg={9}>
-                  <CartDrawer addToCart={Cartdata} />
+                <Grid
+                  lg={9}
+             
+                >
+                  {/* {console.log("Cartdata View type Of", Cartdata,typeof quantity)} */}
+                  <CartDrawer addToCart={Cartdata} quantity={quantity} />
                 </Grid>
                 <Grid lg={2}>
-                  <Button variant="outlined">
+                  <Button variant="outlined" onClick={testsubmit}>
                     <FavoriteBorderIcon />
                   </Button>
                 </Grid>

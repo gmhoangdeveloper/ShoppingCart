@@ -11,14 +11,17 @@ import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import DeleteIcon from "@material-ui/icons/Delete";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { deleteCarts, listCarts, updateCarts } from "../actions/cartActions";
-import CheckOutCart from "../screens/CheckOutCart";
+// import Alert from "@material-ui/lab/Alert";
+import { alertopenSelect } from "../actions/alertActions";
+import CustomizedSnackbars from "./Alert";
 const useStyles = makeStyles((theme) => ({
   drawer: {
     // width: "374px",
-    width: "500px",
+    width: "700px",
   },
   headerCart: {
     backgroundColor: "black",
@@ -35,19 +38,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function CartDrawer(props) {
-  // console.log("HoangCartDrawer");
-  // console.log(props, "OneHoangCartDrawer");
-
   const classes = useStyles();
   const [state, setState] = useState({
     right: false,
   });
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state.cartList);
-  const [quantity, setQuantity] = useState(cartList);
-
+  const alertReducer = useSelector((state) => state.alertReducer);
+  const [quantity, setQuantity] = useState(1);
   const handleChangeQuantityDrawer = (key, quantity) => (event) => {
-    // console.log("key,quantity", key, quantity);
     dispatch(updateCarts(key, Number(event.target.value)));
   };
   const deleteProductCart = (keyProduct) => {
@@ -63,40 +62,64 @@ export default function CartDrawer(props) {
     ) {
       return;
     }
-    setState({ ...state, [anchor]: open });
-    if (open) {
-      dispatch(listCarts(props.addToCart));
+    if (props.addToCart.size !== "") {
+      console.log(
+        " props.addToCart.quantity ,quantity",
+        props.addToCart.quantity,
+        quantity
+      );
+      setState({ ...state, [anchor]: open });
+      if (open) {
+        const dataAddtoCart = { ...props.addToCart, quantity: props.quantity };
+        dispatch(listCarts(dataAddtoCart, props.quantity));
+      }
+    } else {
+      dispatch(alertopenSelect());
+      console.log("Plead Select Size", alertReducer.loading);
+      // alert("Please select Size");
     }
   };
-  const valuesss = () => {
+  const CartProductDrawer = () => {
     if (cartList !== null) {
-      return cartList.map((text, index) => {
-        if (text !== undefined) {
+      console.log("testcartList", cartList);
+      //JSON.parse(localStorage.getItem("CART"))
+      const cartproductdrawer = JSON.parse(localStorage.getItem("CART"));
+      // console.log("CartProductDrawerOne", cartproductdrawer.quantity);
+      // console.log("CartProductDrawerTwo", cartList.quantity);
+      return cartList.map((cartproductdrawer, index) => {
+        console.log("cartproductdrawer.quantity", cartproductdrawer.quantity);
+        if (cartproductdrawer !== undefined) {
           return (
             <Grid className={classes.drawer} lg={12} rows={3} spacing={2}>
               <GridList cellHeight={80} cols={4}>
                 <GridListTile cols={1}>
-                  <img src={text.image2} style={{ width: "80%" }} />
+                  <img
+                    src={cartproductdrawer.image2}
+                    style={{ width: "80%" }}
+                  />
                 </GridListTile>
                 <GridListTile cols={2}>
                   <Typography component="p">
-                    {text.title}
-                    {text.size}
+                    {cartproductdrawer.title}
+                    {cartproductdrawer.size}
                   </Typography>
                   <Typography component="p">
-                    PRICE:{text.price} Quantity:{text.quantity}
+                    PRICE:{cartproductdrawer.price} Quantity:
+                    {cartproductdrawer.quantity}
                   </Typography>
                   <TextField
-                    id="outlined-number"
-                    className={classes.id_productTxt}
                     label="Number"
                     type="number"
-                    onChange={handleChangeQuantityDrawer(index, text.quantity)}
-                    value={text.quantity}
+                    value={cartproductdrawer.quantity}
+                    onChange={handleChangeQuantityDrawer(
+                      index,
+                      cartproductdrawer.quantity
+                    )}
                     InputLabelProps={{
                       shrink: true,
                     }}
                     variant="outlined"
+                    // InputProps={{ inputProps: { min: 1, max: 10 } }}
                   />
                 </GridListTile>
                 <GridListTile cols={1}>
@@ -117,25 +140,12 @@ export default function CartDrawer(props) {
   };
   const subtotalCart = () => {
     if (state.right) {
-      // console.log("subtotalCart", cartList.length);
-      var subtotal = 0;
-      var cartListV2 = [...cartList];
-      console.log("cartListV2....", cartListV2.length);
-      var tongtien = 0;
-      for (var i = 0; i < cartListV2.length; i++) {
-        subtotal = cartListV2[i].quantity *= cartListV2[i].price;
-        tongtien += subtotal;
-        // console.log(
-        //   `cartListV2 Not ...........${i}`,
-        //   subtotal,
-        //   "Tong tièn",
-        //   tongtien
-        // );
+      var subtotalTamTinh = 0;
+      for (var i = 0; i < cartList.length; i++) {
+        subtotalTamTinh += cartList[i].quantity * cartList[i].price;
       }
-      // console.log("tongtien", tongtien);
     }
-    // <CheckOutCart sumCart={subtotal} />;
-    return (subtotal = tongtien);
+    return subtotalTamTinh;
   };
 
   return (
@@ -147,7 +157,9 @@ export default function CartDrawer(props) {
       >
         Add to Card
       </Button>
-      {/* {valuesss()}sdfasdfasd */}
+      <CustomizedSnackbars alertOpenandClose={alertReducer.loading}>
+        Vui Lòng Chọn SIZE
+      </CustomizedSnackbars>
       <Drawer
         anchor={"right"}
         open={state["right"]}
@@ -171,17 +183,19 @@ export default function CartDrawer(props) {
           <Typography></Typography>
         </Grid>
         <Grid xs={9} style={{ margin: "30px auto auto auto" }}>
-          {valuesss()}
+          {CartProductDrawer()}
           <Grid>
             <Typography>Subtotal</Typography>
             <Typography>${subtotalCart()}</Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: "black", color: "white" }}
-              fullWidth={true}
-            >
-              View Cart
-            </Button>
+            <Link to="/checkoutcart">
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "black", color: "white" }}
+                fullWidth={true}
+              >
+                View Cart
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </Drawer>
